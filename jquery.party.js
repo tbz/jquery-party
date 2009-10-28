@@ -14,6 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+"use strict";
 (function ($) {
 	$.fn.party = function (options) {
 		// See README for information
@@ -26,10 +27,12 @@
 			"prevLink"	: false,
 			"disableLinks" : true
 		};
-		if (options) $.extend(settings, options);
+		if (options) {
+			$.extend(settings, options);
+		}
 
 		if (isNaN(settings.duration)) {
-			if (typeof $.fx.speeds[settings.duration] == "undefined") {
+			if (typeof $.fx.speeds[settings.duration] === "undefined") {
 				settings.duration = "normal";
 			}
 			settings.duration = $.fx.speeds[settings.duration];
@@ -56,7 +59,7 @@
 
 			// width and overflow: hidden so we only show {settings.perPage} images
 			container.css({
-				"display" 	: "block",
+				"display"	: "block",
 				"width"		: ((width + settings.gutter) * settings.perPage - settings.gutter) + "px",
 				"height"	: height + "px",
 				"overflow"	: "hidden",
@@ -66,7 +69,7 @@
 			// position: absolute so we can move it, width so the images wont line-break
 			innerContainer.css({
 				"width"		: images.length * (width + settings.gutter) + "px",
-				"position" 	: "absolute",
+				"position"	: "absolute",
 				"top"		: 0,
 				"left"		: 0
 			});
@@ -79,9 +82,9 @@
 			firstImage.css("margin-left", 0);
 			
 			move = function (direction) {
-				var animationDiff = animationWidth * (direction == "right" ? -1 : 1);
+				var animationDiff = animationWidth * (direction === "right" ? -1 : 1);
 				if (!innerContainer.is(":animated")) {
-					destination = Math.round(parseInt(innerContainer.css("left"))) + animationDiff;
+					destination = Math.round(parseInt(innerContainer.css("left"), 10), 0) + animationDiff;
 				} else {
 					destination += animationDiff;
 					innerContainer.stop(true);
@@ -99,14 +102,13 @@
 				}, settings.duration);
 
 				if (settings.disableLinks) {
-					console.log(destination, lastLeft);
-					if (destination == 0) {
+					if (destination === 0) {
 						$prevLink.addClass("party-disabled");
 					} else {
 						$prevLink.removeClass("party-disabled");
 					}
 
-					if (destination == lastLeft) {
+					if (destination === lastLeft) {
 						$nextLink.addClass("party-disabled");
 					} else {
 						$nextLink.removeClass("party-disabled");
@@ -134,4 +136,4 @@
 			}
 		});
 	};
-})(jQuery);
+}(jQuery));
