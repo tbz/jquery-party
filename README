@@ -1,4 +1,6 @@
-No options are required.
+- selector should only match ONE element
+- All images in selector have to have the same size (we use the first image's dimensions)
+- No options are required.
 
 <script>
 $(selector).party({
@@ -9,7 +11,9 @@ $(selector).party({
 	"prevLink"			: false, // selector for link to previous page (false = no link)
 	"nextLink"			: false, // selector for link to next page (false = no link)
 
-	"disabledLinks" 	: true   // Set class "disabled" on {prev,next}Link when on last/first page
+	"disableLinks"		: true   // Set class "disabled" on {prev,next}Link when on last/first page
 });
 </script>
+
+
 
