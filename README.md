@@ -43,8 +43,8 @@ Settings
 
 Events
 ------
-pagePrev	move one image backward (auto for prevLink)
-pageNext	move one image forward (auto for nextLink)
-pageFirst	move to first image
-pageLast	move to last image
+    pagePrev	move one image backward (auto for prevLink)
+    pageNext	move one image forward (auto for nextLink)
+    pageFirst	move to first image
+    pageLast	move to last image
 
