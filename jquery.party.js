@@ -14,7 +14,6 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-"use strict";
 (function ($) {
 	$.fn.party = function (options) {
 		// See README for information
