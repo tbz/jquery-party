@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (c) 2009 Tobias Baaz <tobias@baaz.nu>
  *
  * Permission to use, copy, modify, and distribute this software for any
