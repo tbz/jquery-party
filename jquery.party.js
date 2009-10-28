@@ -16,14 +16,15 @@
 
 (function ($) {
 	$.fn.party = function (options) {
+		// See README for information
 		var settings = {
-			// Gutter in pixels
 			"gutter"	: 10,
-			// Images per page
 			"perPage"	:  2, 
-			// How fast the slide should go (@see http://docs.jquery.com/Effects/animate#paramsdurationeasingcallback)
-			"duration"	: "normal" 
-
+			"duration"	: "normal",
+			
+			"nextLink"	: false,
+			"prevLink"	: false,
+			"disableLinks" : true
 		};
 		if (options) $.extend(settings, options);
 
@@ -37,8 +38,8 @@
 		
 		this.each(function () {
 			var container = $(this);
-
 			container.html("<div>" + container.html() + '</div>');
+
 			var innerContainer	= $("div:eq(0)", container),
 			    images			= $("img", container),
 			    firstImage		= images.eq(0),
@@ -46,8 +47,12 @@
 			    height			= firstImage.height(),
 
 			    animationWidth	= width + settings.gutter,
+			    lastLeft		= -1 * animationWidth * (images.length - settings.perPage),
 			    destination,
-			    lastLeft		= -1 * animationWidth * (images.length - settings.perPage);
+				move,
+				
+				$nextLink,
+				$prevLink;
 
 			// width and overflow: hidden so we only show {settings.perPage} images
 			container.css({
@@ -73,7 +78,7 @@
 			});
 			firstImage.css("margin-left", 0);
 			
-			var move = function (direction) {
+			move = function (direction) {
 				var animationDiff = animationWidth * (direction == "right" ? -1 : 1);
 				if (!innerContainer.is(":animated")) {
 					destination = Math.round(parseInt(innerContainer.css("left"))) + animationDiff;
@@ -92,13 +97,41 @@
 				innerContainer.animate({
 					"left" : destination + "px"
 				}, settings.duration);
+
+				if (settings.disableLinks) {
+					console.log(destination, lastLeft);
+					if (destination == 0) {
+						$prevLink.addClass("party-disabled");
+					} else {
+						$prevLink.removeClass("party-disabled");
+					}
+
+					if (destination == lastLeft) {
+						$nextLink.addClass("party-disabled");
+					} else {
+						$nextLink.removeClass("party-disabled");
+					}
+				}
 			};
 
-			container.bind("moveLeft", function () {
-				move("left");
-			}).bind("moveRight", function () {
+			container.bind("pageNext", function () {
 				move("right");
+			}).bind("pagePrev", function () {
+				move("left");
 			});
+
+			if (settings.prevLink) {
+				$prevLink = $(settings.prevLink).click(function (e) {
+					e.preventDefault();
+					container.trigger("pagePrev");
+				}).addClass("party-disabled");
+			}
+			if (settings.nextLink) {
+				$nextLink = $(settings.nextLink).click(function (e) {
+					e.preventDefault();
+					container.trigger("pageNext");
+				});
+			}
 		});
 	};
 })(jQuery);
