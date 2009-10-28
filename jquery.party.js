@@ -82,12 +82,16 @@
 			firstImage.css("margin-left", 0);
 			
 			move = function (direction) {
-				var animationDiff = animationWidth * (direction === "right" ? -1 : 1);
-				if (!innerContainer.is(":animated")) {
-					destination = Math.round(parseInt(innerContainer.css("left"), 10), 0) + animationDiff;
+				if (typeof direction === "number") {
+					destination = direction;
 				} else {
-					destination += animationDiff;
-					innerContainer.stop(true);
+					var animationDiff = animationWidth * (direction === "right" ? -1 : 1);
+					if (!innerContainer.is(":animated")) {
+						destination = Math.round(parseInt(innerContainer.css("left"), 10), 0) + animationDiff;
+					} else {
+						destination += animationDiff;
+						innerContainer.stop(true);
+					}
 				}
 				
 				if (destination > 0) {
@@ -120,6 +124,10 @@
 				move("right");
 			}).bind("pagePrev", function () {
 				move("left");
+			}).bind("pageFirst", function () {
+				move(0);
+			}).bind("pageLast", function () {
+				move(lastLeft);
 			});
 
 			if (settings.prevLink) {
