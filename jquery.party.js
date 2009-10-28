@@ -1,14 +1,13 @@
 (function ($) {
 	$.fn.party = function (options) {
 		var settings = {
-			"gutter"			: 10, // Gutter in pixels
-			"perPage"			:  2, // Images per page
-			"duration"			: "normal", // How fast the slide should go (@see http://docs.jquery.com/Effects/animate#paramsdurationeasingcallback)
-		
-			"prevLink"			: false, // selector for link to previous page (false = no link)
-			"nextLink"			: false, // selector for link to next page (false = no link)
-		
-			"disableLinks"		: true   // Set class "disabled" on {prev,next}Link when on last/first page
+			// Gutter in pixels
+			"gutter"	: 10,
+			// Images per page
+			"perPage"	:  2, 
+			// How fast the slide should go (@see http://docs.jquery.com/Effects/animate#paramsdurationeasingcallback)
+			"duration"	: "normal" 
+
 		};
 		if (options) $.extend(settings, options);
 
@@ -59,7 +58,7 @@
 			firstImage.css("margin-left", 0);
 			
 			var move = function (direction) {
-				var animationDiff = animationWidth * (direction == "left" ? -1 : 1);
+				var animationDiff = animationWidth * (direction == "right" ? -1 : 1);
 				if (!innerContainer.is(":animated")) {
 					destination = Math.round(parseInt(innerContainer.css("left"))) + animationDiff;
 				} else {
@@ -79,18 +78,11 @@
 				}, settings.duration);
 			};
 
-			if (settings.nextLink) {
-				$(settings.nextLink).click(function (e) {
-					e.preventDefault();
-					move("left");
-				});
-			}
-			if (settings.prevLink) {
-				$(settings.prevLink).click(function (e) {
-					e.preventDefault();
-					move("right");
-				});
-			}
+			container.bind("moveLeft", function () {
+				move("left");
+			}).bind("moveRight", function () {
+				move("right");
+			});
 		});
 	};
 })(jQuery);
