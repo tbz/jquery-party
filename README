@@ -1,0 +1,15 @@
+No options are required.
+
+<script>
+$(selector).party({
+	"gutter"			: 10, // Gutter in pixels
+	"perPage"			:  2, // Images per page
+	"duration"			: "normal", // How fast the slide should go (@see http://docs.jquery.com/Effects/animate#paramsdurationeasingcallback)
+
+	"prevLink"			: false, // selector for link to previous page (false = no link)
+	"nextLink"			: false, // selector for link to next page (false = no link)
+
+	"disabledLinks" 	: true   // Set class "disabled" on {prev,next}Link when on last/first page
+});
+</script>
+
