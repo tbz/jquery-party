@@ -1,13 +1,14 @@
 (function ($) {
 	$.fn.party = function (options) {
 		var settings = {
-			"gutter" 	: 10,
-			"perPage" 	: 2,
-			"duration"	: "normal",
-
-			"prevLink"	: false,
-			"nextLink"	: false,
-			"hideLinks"	: false
+			"gutter"			: 10, // Gutter in pixels
+			"perPage"			:  2, // Images per page
+			"duration"			: "normal", // How fast the slide should go (@see http://docs.jquery.com/Effects/animate#paramsdurationeasingcallback)
+		
+			"prevLink"			: false, // selector for link to previous page (false = no link)
+			"nextLink"			: false, // selector for link to next page (false = no link)
+		
+			"disableLinks"		: true   // Set class "disabled" on {prev,next}Link when on last/first page
 		};
 		if (options) $.extend(settings, options);
 
@@ -18,29 +19,31 @@
 			settings.duration = $.fx.speeds[settings.duration];
 		}
 
+		
 		this.each(function () {
-			var container	= $(this);
-			container.html('<div>' + container.html() + '</div>');
+			var container = $(this);
 
-			var innerContainer = $("div:eq(0)", container),
-			    images		= $("img", container),
-				firstImage	= images.eq(0),
-			    width 		= firstImage.width(),
-				height		= firstImage.height(),
-				animationWidth = width + settings.gutter,
-				lastLeft	= -1 * animationWidth * (images.length - settings.perPage),
-				move,
-				moveTo,
-				moveQueue	= [],
-				faster		= false;
+			container.html("<div>" + container.html() + '</div>');
+			var innerContainer	= $("div:eq(0)", container),
+			    images			= $("img", container),
+			    firstImage		= images.eq(0),
+			    width			= firstImage.width(),
+			    height			= firstImage.height(),
 
+			    animationWidth	= width + settings.gutter,
+			    destination,
+			    lastLeft		= -1 * animationWidth * (images.length - settings.perPage);
+
+			// width and overflow: hidden so we only show {settings.perPage} images
 			container.css({
 				"display" 	: "block",
-				"width"		: ((width * settings.perPage) + settings.gutter) + "px",
+				"width"		: ((width + settings.gutter) * settings.perPage - settings.gutter) + "px",
 				"height"	: height + "px",
 				"overflow"	: "hidden",
 				"position"	: "relative"
 			});
+
+			// position: absolute so we can move it, width so the images wont line-break
 			innerContainer.css({
 				"width"		: images.length * (width + settings.gutter) + "px",
 				"position" 	: "absolute",
@@ -54,40 +57,40 @@
 				"margin-left" : settings.gutter + "px"
 			});
 			firstImage.css("margin-left", 0);
-
+			
 			var move = function (direction) {
-				var to = animationWidth,
-				    animationDiff = innerContainer.css("left") % animationWidth;
-
-				if (animationDiff > 0) {
-					to += animationDiff;
+				var animationDiff = animationWidth * (direction == "left" ? -1 : 1);
+				if (!innerContainer.is(":animated")) {
+					destination = Math.round(parseInt(innerContainer.css("left"))) + animationDiff;
+				} else {
+					destination += animationDiff;
+					innerContainer.stop(true);
 				}
-				if (direction == "right") {
-					to = to * -1;
+				
+				if (destination > 0) {
+					destination = 0;
 				}
-
+				else if (destination < lastLeft) {
+					destination = lastLeft;
+				}
+				
 				innerContainer.animate({
-					"left" : "+=" + to + "px"
-				});
-				return true;
+					"left" : destination + "px"
+				}, settings.duration);
 			};
 
-			if (settings.prevLink) {
-				$prevLink = $(settings.prevLink).click(function (e) {
+			if (settings.nextLink) {
+				$(settings.nextLink).click(function (e) {
 					e.preventDefault();
 					move("left");
 				});
 			}
-			if (settings.nextLink) {
-				$nextLink = $(settings.nextLink).click(function (e) {
+			if (settings.prevLink) {
+				$(settings.prevLink).click(function (e) {
 					e.preventDefault();
 					move("right");
 				});
 			}
 		});
-
-		// "This will ensure that the expected jQuery chaining remains intact"
-		return this;
 	};
 })(jQuery);
-
