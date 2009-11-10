@@ -40,7 +40,7 @@
 		
 		this.each(function () {
 			var container = $(this);
-			container.html("<div>" + container.html() + '</div>');
+			container.html('<div class="party-innercontainer">' + container.html() + '</div>');
 
 			var innerContainer	= $("div:eq(0)", container),
 			    images			= $("img", container),
