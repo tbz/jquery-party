@@ -21,10 +21,11 @@
 			"gutter"	: 0,
 			"perPage"	: 2, 
 			"duration"	: "normal",
-			
 			"nextLink"	: false,
 			"prevLink"	: false,
-			"disableLinks" : true
+			"disableLinks" : true,
+			"width" : 0,
+			"height" : 0
 		};
 		if (options) {
 			$.extend(settings, options);
@@ -43,8 +44,8 @@
 			    innerContainer  = $(">div", container),
 			    images			= $("img", container),
 			    firstImage		= images.eq(0),
-			    width			= firstImage.width(),
-			    height			= firstImage.height(),
+			    width			= settings.width ? settings.width : firstImage.width(),
+			    height			= settings.height ? settings.height : firstImage.height(),
 
 			    animationWidth	= width + settings.gutter,
 			    lastLeft		= -1 * animationWidth * (images.length - settings.perPage),
