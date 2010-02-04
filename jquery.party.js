@@ -18,8 +18,8 @@
 	$.fn.party = function (options) {
 		// See README for information
 		var settings = {
-			"gutter"	: 10,
-			"perPage"	:  2, 
+			"gutter"	: 0,
+			"perPage"	: 2, 
 			"duration"	: "normal",
 			
 			"nextLink"	: false,
@@ -39,10 +39,8 @@
 
 		
 		this.each(function () {
-			var container = $(this);
-			container.html('<div class="party-innercontainer">' + container.html() + '</div>');
-
-			var innerContainer	= $("div:eq(0)", container),
+			var container		= $(this).wrapInner('<div class="party-innercontainer" />'),
+			    innerContainer  = $(">div", container),
 			    images			= $("img", container),
 			    firstImage		= images.eq(0),
 			    width			= firstImage.width(),
